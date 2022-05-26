@@ -1,5 +1,12 @@
+require('dotenv').config();
+
 var axios = require('axios');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secret = process.env.SECRET;
+const maxAge = 60 * 60;
+
+const createToken = (id) => jwt.sign({ id }, secret, { expiresIn: maxAge });
 
 const getUsers = () =>
 	new Promise((resolve, reject) => {
@@ -18,8 +25,8 @@ const addUser = async ({ username, password }) =>
 		axios
 			.post('http://localhost:5000/users', { username, password })
 			.then((response) => {
-				console.log(response.data);
-				resolve('ok');
+				// console.log(response.data);
+				resolve(response.data);
 			})
 			.catch((error) => {
 				reject(error);
@@ -42,8 +49,9 @@ module.exports.signup_post = async (req, res) => {
 		const hash = await bcrypt.hash(password, 12);
 
 		await addUser({ username, password: hash })
-			.then((response) => {
-				console.log(response);
+			.then((data) => {
+				const token = createToken(data.id);
+				res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 				res.sendStatus(200);
 			})
 			.catch((error) => console.log(error));
@@ -68,7 +76,11 @@ module.exports.login_post = async (req, res) => {
 
 	if (foundUser) {
 		const match = await bcrypt.compare(password, foundUser.password);
-		if (match) res.sendStatus(200);
+		if (match) {
+      const token = createToken(foundUser.id);
+      res.cookie('jwt',token, {httpOnly: true, maxAge : maxAge * 1000});
+			res.sendStatus(200);
+		}
 	} else {
 		res.sendStatus(400);
 	}
