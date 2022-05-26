@@ -1,4 +1,5 @@
 var axios = require('axios');
+const bcrypt = require('bcrypt');
 
 const getUsers = () =>
 	new Promise((resolve, reject) => {
@@ -37,31 +38,38 @@ module.exports.signup_post = async (req, res) => {
 	});
 
 	if (userExists) res.sendStatus(400);
-	else
-		await addUser({ username, password })
+	else {
+		const hash = await bcrypt.hash(password, 12);
+
+		await addUser({ username, password: hash })
 			.then((response) => {
 				console.log(response);
 				res.sendStatus(200);
 			})
 			.catch((error) => console.log(error));
+	}
 };
 
 module.exports.login_get = (req, res) => {
 	res.render('login');
 };
 
-
 module.exports.login_post = async (req, res) => {
 	const { username, password } = req.body;
 
-	let userExists = false;
+	let foundUser;
 	await getUsers().then((users) => {
 		users.filter((user) => {
-      if (user.username === username && user.password === password) {
-        userExists = true;
-      }
-    });
+			if (user.username === username) {
+				foundUser = user;
+			}
+		});
 	});
 
-	userExists ? res.sendStatus(200) : res.sendStatus(400);
+	if (foundUser) {
+		const match = await bcrypt.compare(password, foundUser.password);
+		if (match) res.sendStatus(200);
+	} else {
+		res.sendStatus(400);
+	}
 };
