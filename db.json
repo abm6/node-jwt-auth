@@ -1,0 +1,72 @@
+{
+  "users": [
+    {
+      "id": "2",
+      "username": "raj",
+      "password": "password",
+      "likedBooks": [],
+      "likedAuthors": []
+    },
+    {
+      "username": "abhisek",
+      "password": "password",
+      "id": "YPHsDRI"
+    },
+    {
+      "username": "abhisek4",
+      "password": "password",
+      "id": "9Qjl9OF"
+    },
+    {
+      "username": "kummar",
+      "password": "password",
+      "id": "J4nxxDm"
+    }
+  ],
+  "books": [
+    {
+      "id": "1",
+      "name": "Gitanjali",
+      "rating": 9
+    },
+    {
+      "id": "4",
+      "name": "Ramayan",
+      "rating": 8
+    },
+    {
+      "id": "2",
+      "name": "Godan",
+      "rating": 5
+    },
+    {
+      "id": "3",
+      "name": "Rangbhoomi",
+      "rating": 8
+    }
+  ],
+  "authors": [
+    {
+      "id": "1",
+      "name": "Prem Chand",
+      "books": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Valmiki",
+      "books": [
+        4
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Rabindranath Tagore",
+      "books": [
+        1
+      ]
+    }
+  ]
+}
