@@ -4,14 +4,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const authRoutes = require('./routes/authRoutes');
-const { requireAuth } = require('./middleware/authMiddleware');
-
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const userRoutes = require('./routes/userRoutes');
 
 require('dotenv').config();
 const app = express();
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,11 +25,9 @@ app.get('/', (req, res) => {
 	res.render('home');
 });
 
-app.get('/profile', requireAuth, (req, res) => {
-	res.render('profile');
-});
-
+//routing
 app.use(authRoutes);
+app.use(userRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
