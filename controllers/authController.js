@@ -77,11 +77,16 @@ module.exports.login_post = async (req, res) => {
 	if (foundUser) {
 		const match = await bcrypt.compare(password, foundUser.password);
 		if (match) {
-      const token = createToken(foundUser.id);
-      res.cookie('jwt',token, {httpOnly: true, maxAge : maxAge * 1000});
+			const token = createToken(foundUser.id);
+			res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 			res.sendStatus(200);
 		}
 	} else {
 		res.sendStatus(400);
 	}
+};
+
+module.exports.logout_get = (req, res) => {
+	res.cookie('jwt', '', { maxAge: 1 });
+	res.redirect('/');
 };

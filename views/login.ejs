@@ -16,6 +16,9 @@
 	</div>
 </div>
 
+<%- include('partials/modal') %> 
+
+<script src="javascripts/jquery-3.6.0.min.js"></script>
 <script>
 	function validate(element) {
 		const username = element.username.value;
@@ -35,6 +38,7 @@
 			.then((response) => {
 				if (response.status == 200) {
 					alert('User Logged in successfully');
+          // modalTrigger('Success', 'User Logged in successfully', 'OK');
 					window.location.href = '/';
 				} else if (response.status == 400) {
 					alert('Invalid Credentials!');
@@ -45,6 +49,7 @@
 		return false;
 	}
 </script>
+
 
 
 <%- include('partials/footer') %>
