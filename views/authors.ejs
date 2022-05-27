@@ -1,0 +1,25 @@
+<%- include('partials/header') %> <%- include('partials/nav') %>
+
+<header>
+	<div class="container mt-2">
+		<h2>Viewing authors</h2>
+		<div class="author-container">
+			<% for(let index in likedAuthors) { %>
+			<ul>
+				<li>
+					<a id="<%= likedAuthors[index].id %>" href=""><%= likedAuthors[index].name %></a>
+				</li>
+			</ul>
+			<% } %>
+		</div>
+	</div>
+</header>
+
+<script>
+	const authorLinks = document.querySelectorAll('.author-container a');
+	authorLinks.forEach((link) => {
+		link.href = link.href + "/" + link.id;
+	});
+</script>
+
+<%- include('partials/footer') %>
