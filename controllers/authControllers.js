@@ -23,7 +23,7 @@ const getUsers = () =>
 const addUser = async ({ username, password }) =>
 	new Promise((resolve, reject) => {
 		axios
-			.post('http://localhost:5000/users', { username, password })
+			.post('http://localhost:5000/users', { username, password, likedAuthors: [] })
 			.then((response) => {
 				// console.log(response.data);
 				resolve(response.data);
@@ -33,10 +33,11 @@ const addUser = async ({ username, password }) =>
 			});
 	});
 
-module.exports.signup_get = (req, res) => {
+const signup_get = (req, res) => {
 	res.render('signup');
 };
-module.exports.signup_post = async (req, res) => {
+
+const signup_post = async (req, res) => {
 	const { username, password } = req.body;
 
 	let userExists = false;
@@ -48,21 +49,22 @@ module.exports.signup_post = async (req, res) => {
 	else {
 		const hash = await bcrypt.hash(password, 12);
 
-		await addUser({ username, password: hash })
+		await addUser({ username : username, password: hash })
 			.then((data) => {
 				const token = createToken(data.id);
 				res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.cookie('userId', data.id);
 				res.sendStatus(200);
 			})
 			.catch((error) => console.log(error));
 	}
 };
 
-module.exports.login_get = (req, res) => {
+const login_get = (req, res) => {
 	res.render('login');
 };
 
-module.exports.login_post = async (req, res) => {
+const login_post = async (req, res) => {
 	const { username, password } = req.body;
 
 	let foundUser;
@@ -79,6 +81,7 @@ module.exports.login_post = async (req, res) => {
 		if (match) {
 			const token = createToken(foundUser.id);
 			res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+      res.cookie('userId', foundUser.id);
 			res.sendStatus(200);
 		}
 	} else {
@@ -86,7 +89,16 @@ module.exports.login_post = async (req, res) => {
 	}
 };
 
-module.exports.logout_get = (req, res) => {
+const logout_get = (req, res) => {
 	res.cookie('jwt', '', { maxAge: 1 });
+  res.cookie('userId', '', { maxAge: 1 });
 	res.redirect('/');
+};
+
+module.exports = {
+	signup_get,
+	signup_post,
+	login_get,
+	login_post,
+	logout_get,
 };
