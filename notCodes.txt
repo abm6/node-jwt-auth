@@ -1,0 +1,2 @@
+Kill process 4000
+kill -9 $(lsof -i :4000 | grep node |  awk '{print $2}')
