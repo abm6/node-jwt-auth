@@ -51,7 +51,6 @@ const books_get = async (req, res) => {
 		const books = await getBooks();
 		const userBooks = books.filter((book) => book.author_id === authorId);
 
-		console.log(userBooks);
 		res.render('books', { books: userBooks });
 	} catch (error) {
 		console.log(error);
