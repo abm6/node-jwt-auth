@@ -4,7 +4,7 @@ var axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const createToken = (id) => jwt.sign({ id }, secret, { expiresIn: maxAge });
+const createToken = (id) => jwt.sign({ id }, secret, { expiresIn: maxTokenAge });
 
 const getUsers = () =>
 	new Promise((resolve, reject) => {
