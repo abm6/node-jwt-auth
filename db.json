@@ -12,38 +12,56 @@
     {
       "username": "kumar",
       "password": "$2b$12$PVRxp.whEQ2WOju6Fiv3eeP2v72XNqz9fF48JsR406PH8SK8LKgRm",
-      "likedAuthors": ["3","1"],
+      "likedAuthors": [
+        "3",
+        "1"
+      ],
       "id": "09aid"
     },
     {
       "username": "abh1",
       "password": "$2b$12$zhQEf5oBOZChKkIk8APhyuf3clrKWv3siIqtCnyFoO9/.CodJO6ta",
-      "likedAuthors": ["1","3"],
+      "likedAuthors": [
+        "1",
+        "3"
+      ],
       "id": "71sa5Nn"
+    },
+    {
+      "username": "",
+      "password": "$2b$12$EzijhbJ8KpSS/7dHZR9mz.F2kh8nSwtn3HgbwGOE7PEfIvuEXHcQC",
+      "likedAuthors": [],
+      "id": "NfOqOAn"
+    },
+    {
+      "username": "kumarrr",
+      "password": "$2b$12$Q.1S5SB956AFbCzPYuu6VeV9sCtS1n0ONxANUDyCHxrYmKyl2Cs/O",
+      "likedAuthors": [],
+      "id": "5Y36Eyt"
     }
   ],
   "books": [
     {
       "book_id": "1",
-      "author_id" : "3",
+      "author_id": "3",
       "name": "Gitanjali",
       "rating": 9
     },
     {
       "book_id": "4",
-      "author_id" : "2",
+      "author_id": "2",
       "name": "Ramayan",
       "rating": 8
     },
     {
       "book_id": "2",
-      "author_id" : "1",
+      "author_id": "1",
       "name": "Godan",
       "rating": 5
     },
     {
       "book_id": "3",
-      "author_id" : "1",
+      "author_id": "1",
       "name": "Rangbhoomi",
       "rating": 8
     }
