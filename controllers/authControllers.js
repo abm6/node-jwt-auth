@@ -1,44 +1,22 @@
-const {secret, maxTokenAge} = require('../config/tokenConfig');
+const { secret, maxTokenAge } = require('../config/tokenConfig');
+const {getManyUsers, addOneUser } = require('../utils/helper.controller.axios');
 
-var axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const createToken = (id) => jwt.sign({ id }, secret, { expiresIn: maxTokenAge });
-
-const getUsers = () =>
-	new Promise((resolve, reject) => {
-		axios
-			.get('http://localhost:5000/users')
-			.then((response) => {
-				resolve(response.data);
-			})
-			.catch((error) => {
-				reject(error);
-			});
-	});
-
-const addUser = async ({ username, password }) =>
-	new Promise((resolve, reject) => {
-		axios
-			.post('http://localhost:5000/users', { username, password, likedAuthors: [] })
-			.then((response) => {
-				resolve(response.data);
-			})
-			.catch((error) => {
-				reject(error);
-			});
-	});
 
 const signup_get = (req, res) => {
 	res.render('signup');
 };
 
 const signup_post = async (req, res) => {
-	const { username, password } = req.body;
+	const { username, password, fullname, email, age, profession, gender } = req.body;
+	console.log('BODY');
+	console.log(req.body);
 
 	let userExists = false;
-	await getUsers().then((users) => {
+	await getManyUsers().then((users) => {
 		users.filter((user) => (user.username === username ? (userExists = true) : false));
 	});
 
@@ -46,11 +24,11 @@ const signup_post = async (req, res) => {
 	else {
 		const hash = await bcrypt.hash(password, 12);
 
-		await addUser({ username : username, password: hash })
+		await addOneUser({ username: username, password: hash })
 			.then((data) => {
 				const token = createToken(data.id);
 				res.cookie('jwt', token, { httpOnly: true, maxAge: maxTokenAge * 1000 });
-        res.cookie('userId', data.id);
+				res.cookie('userId', data.id);
 				res.sendStatus(200);
 			})
 			.catch((error) => console.log(error));
@@ -65,7 +43,7 @@ const login_post = async (req, res) => {
 	const { username, password } = req.body;
 
 	let foundUser;
-	await getUsers().then((users) => {
+	await getManyUsers().then((users) => {
 		users.filter((user) => {
 			if (user.username === username) {
 				foundUser = user;
@@ -78,7 +56,7 @@ const login_post = async (req, res) => {
 		if (match) {
 			const token = createToken(foundUser.id);
 			res.cookie('jwt', token, { httpOnly: true, maxAge: maxTokenAge * 1000 });
-      res.cookie('userId', foundUser.id);
+			res.cookie('userId', foundUser.id);
 			res.sendStatus(200);
 		}
 	} else {
@@ -88,7 +66,7 @@ const login_post = async (req, res) => {
 
 const logout_get = (req, res) => {
 	res.cookie('jwt', '', { maxAge: 1 });
-  res.cookie('userId', '', { maxAge: 1 });
+	res.cookie('userId', '', { maxAge: 1 });
 	res.redirect('/');
 };
 

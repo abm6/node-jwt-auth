@@ -1,27 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
-const jwt = require('jsonwebtoken');
-
-const getUser = (userId) => {
-	return axios
-		.get(`http://localhost:5000/users/${userId}`)
-		.then((response) => response.data)
-		.catch((error) => console.log(error));
-};
-
-const getAuthors = () => {
-	return axios
-		.get(`http://localhost:5000/authors/`)
-		.then((response) => response.data)
-		.catch((error) => console.log(error));
-};
-
-const getBooks = async () => {
-	return axios
-		.get('http://localhost:5000/books/')
-		.then((response) => response.data)
-		.catch((error) => console.log(error));
-};
+const { getOneUser, getManyAuthors, getManyBooks } = require('../utils/helper.controller.axios');
 
 const profile_get = (req, res) => {
 	res.render('profile');
@@ -31,8 +10,8 @@ const authors_get = async (req, res) => {
 	const userId = req.params.userId;
 
 	try {
-		const user = await getUser(userId);
-		const authors = await getAuthors();
+		const user = await getOneUser(userId);
+		const authors = await getManyAuthors();
 		const likedAuthors = authors.filter((author) => user.likedAuthors.includes(author.id));
 
 		console.log(user);
@@ -48,7 +27,7 @@ const authors_get = async (req, res) => {
 const books_get = async (req, res) => {
 	const authorId = req.params.authorId;
 	try {
-		const books = await getBooks();
+		const books = await getManyBooks();
 		const userBooks = books.filter((book) => book.author_id === authorId);
 
 		res.render('books', { books: userBooks });
