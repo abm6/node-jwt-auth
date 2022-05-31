@@ -1,0 +1,55 @@
+<%- include('partials/header') %> <%- include('partials/nav') %>
+<style>
+  .card-img-top{
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    
+  }
+</style>
+
+<header>
+	<div class="container d-flex justify-content-center">
+		<h3>Viewing the books</h3>
+	</div>
+	<div class="container">
+		<div class="d-flex flex-wrap justify-content-center align-items-center">
+			<% for(let book of books) { %>
+			<div class="card m-2" style="width: 18rem">
+				<img src="/images/books/<%=book.book_id%>.jpg" class="card-img-top" alt="..." />
+				<div class="card-body">
+					<h5 class="card-title"><%= book.name %></h5>
+					<p class="card-text">
+						Some quick example text to build on the card title and make up the bulk of the card's content.
+					</p>
+					<div>
+						<label for="customRange2" class="form-label">Ratings</label>
+						<input type="range" class="form-range" min="0" max="10" value="<%=book.rating%>" id="customRange2" />
+					</div>
+					<div class="btn like-btn">
+						<img src="/images/heart.png" style="width: 30px" alt="" />
+					</div>
+				</div>
+			</div>
+			<% } %>
+		</div>
+	</div>
+</header>
+
+<script>
+	document.querySelectorAll('.like-btn').forEach(function (btn) {
+		btn.addEventListener('click', function () {
+
+			if (this.classList.contains('liked')) {
+				this.classList.remove('liked');
+				this.firstElementChild.src = '/images/heart.png';
+			} else {
+				this.classList.add('liked');
+				this.firstElementChild.src = '/images/heart-liked.png';
+			}
+		});
+	});
+</script>
+
+<%- include('partials/footer') %>
